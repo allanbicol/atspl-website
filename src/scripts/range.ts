@@ -485,7 +485,7 @@ export async function initRange(canvas: HTMLCanvasElement, host: HTMLElement) {
     // Keep all seven lanes in frame on tall, narrow screens.
     camera.fov = camera.aspect < 0.8 ? 62 : camera.aspect < 1.25 ? 50 : 38;
     // The headline owns the lower part of the hero, so lift the horizon.
-    camera.setViewOffset(w, h, 0, Math.round(h * (camera.aspect < 0.8 ? 0.3 : 0.17)), w, h);
+    camera.setViewOffset(w, h, 0, Math.round(h * (camera.aspect < 0.8 ? 0.3 : 0.19)), w, h);
     camera.updateProjectionMatrix();
   }
   new ResizeObserver(resize).observe(host);

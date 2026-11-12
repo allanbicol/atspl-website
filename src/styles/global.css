@@ -21,7 +21,9 @@
   --font-stencil: 'Big Shoulders Stencil Variable', var(--font-display);
   --font-body: 'Instrument Sans Variable', 'Segoe UI', system-ui, sans-serif;
 
-  --fs-hero: clamp(2.9rem, 7.1vw, 7.75rem);
+  /* Capped by viewport height as well as width, so the homepage headline stays
+     below the targets on short, wide screens. */
+  --fs-hero: clamp(2.9rem, min(7.1vw, 9.2svh), 6.5rem);
   --fs-h1: clamp(3rem, 8vw, 8rem);
   --fs-h2: clamp(2.3rem, 4.8vw, 4.75rem);
   --fs-h3: clamp(1.5rem, 2.3vw, 2.1rem);

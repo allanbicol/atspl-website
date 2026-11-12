@@ -218,7 +218,16 @@
     opacity: 0;
   }
 }
-@media (max-width: 1020px) {
+/* Between these widths the display would sit on top of the hero buttons. */
+@media (max-width: 1339px) {
+  .hud {
+    width: 224px;
+  }
+  .hero__foot {
+    column-gap: 28px;
+  }
+}
+@media (max-width: 1259px) {
   .hud {
     display: none;
   }

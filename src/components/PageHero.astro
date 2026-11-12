@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  title: string;
+  sub?: string;
+  image: ImageMetadata;
+  alt?: string;
+  position?: string;
+  video?: string;
+}
+const { title, sub, image, alt = '', position = '50% 50%', video } = Astro.props;
+---
+
+<section class="phero theme-night" data-rail="Top">
+  <div class="phero__media" data-parallax="12">
+    <Image src={image} alt={alt} widths={[768, 1280, 1920, image.width]} sizes="100vw" loading="eager" fetchpriority="high" style={`object-position:${position}`} />
+    {video && <video data-bg-video={video} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" />}
+  </div>
+  <div class="wrap phero__body">
+    <h1 class="phero__title" data-hinge="load">{title}</h1>
+    {sub && <p class="phero__sub lead">{sub}</p>}
+    <slot />
+  </div>
+</section>

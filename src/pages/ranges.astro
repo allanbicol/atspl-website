@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import '../styles/pages.css';
+import { STATS } from '../config';
+import hero from '../assets/img/header-ranges.jpg';
+import imgDesign from '../assets/img/ranges-design.jpg';
+import imgIntegration from '../assets/img/ranges-integration.jpg';
+import imgMaintenance from '../assets/img/ranges-maintenance.jpg';
+
+const features = [
+  {
+    id: 'design',
+    theme: 'theme-paper',
+    title: 'Design',
+    text: 'ATS employs a training need led design approach to ensure that the technical range solution is safe, compliant and meets the end users exacting requirements.',
+    img: imgDesign,
+    alt: 'Range engineering drawings and schematics spread across a desk',
+  },
+  {
+    id: 'integration',
+    theme: 'theme-night',
+    title: 'Integration',
+    text: 'ATS combines the skills of ex-military professionals with the know-how of highly skilled software and hardware engineers to achieve a fully integrated live fire training solution.',
+    img: imgIntegration,
+    alt: 'A technician with a laptop commissioning a full-size armoured vehicle target on a range',
+  },
+  {
+    id: 'maintenance',
+    theme: 'theme-paper',
+    title: 'Maintenance',
+    text: 'ATS employs a nationwide reliability centred maintenance approach to support all Australian Defence Force ranges to ensure range availability, reliability and longevity.',
+    img: imgMaintenance,
+    alt: 'A technician’s hands servicing a target lifter mechanism in the field, an ATS service van behind',
+  },
+];
+---
+
+<Base title="Ranges" description="ATS designs, integrates and maintains live fire ranges: training need led design, fully integrated hardware and software, and nationwide reliability centred maintenance.">
+  <PageHero
+    title="Ranges"
+    sub="Designed around the training need, integrated by engineers and ex-military professionals, and kept available by a nationwide maintenance team."
+    image={hero}
+    alt="Firers on a numbered-lane range, with lane boards one to twelve on the stop butt"
+    position="50% 40%"
+  />
+
+  {
+    features.map((f, i) => (
+      <section id={f.id} class:list={['section', 'feature', f.theme, i % 2 === 1 && 'feature--flip']} data-rail={f.title}>
+        <div class="wrap grid feature__grid">
+          <figure class="shot feature__shot" data-wipe={i % 2 === 1 ? 'left' : 'up'}>
+            <Image src={f.img} alt={f.alt} widths={[640, 1000, 1600, 2400]} sizes="(max-width: 860px) 100vw, 58vw" />
+          </figure>
+          <div class="feature__copy">
+            <h2 data-hinge>{f.title}</h2>
+            <p class="lead prose">{f.text}</p>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section theme-olive" data-rail="Numbers">
+    <div class="wrap">
+      <h2 class="sr-only">ATS in numbers</h2>
+      <div class="stats">
+        {
+          STATS.map((s) => (
+            <div class="stat">
+              <span class="stat__num stencil">
+                <span data-count={s.value}>{new Intl.NumberFormat('en-AU').format(s.value)}</span>
+                <sup>{s.suffix}</sup>
+              </span>
+              <span class="stat__label">{s.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-night" data-rail="ILTS">
+    <div class="wrap split">
+      <div class="split__head">
+        <h2 data-hinge>Supplying to Defence ranges?</h2>
+      </div>
+      <div class="stack">
+        <p class="lead prose">
+          ATS is the Managing Contractor for the Integrated Land Target Systems program, and wants to hear about products
+          and technologies that could enhance Army’s live-fire training capability.
+        </p>
+        <div class="btn-row">
+          <Button href="/ilts/" label="About the ILTS program" arrow />
+          <Button href="/supplier-opportunity/" label="Register your capability" variant="ghost" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

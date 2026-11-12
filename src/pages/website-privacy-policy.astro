@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/pages.css';
+import sections from '../content/privacy.json';
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+
+<Base title="Website privacy policy" description="How Australian Target Systems Pty Ltd collects, holds, uses and discloses personal information under the Privacy Act 1988." footerCta={false}>
+  <section class="theme-night policy__head">
+    <div class="wrap">
+      <h1 data-hinge="load">Website privacy policy</h1>
+      <p class="lead">Australian Target Systems Pty Ltd</p>
+    </div>
+  </section>
+  <section class="section theme-paper">
+    <div class="wrap">
+      <div class="policy__grid">
+        <ul class="policy__index" aria-label="Sections">
+          {sections.map((s) => <li><a href={`#${slug(s.title)}`}>{s.title}</a></li>)}
+        </ul>
+        <div class="policy__body">
+          {
+            sections.map((s) => (
+              <section id={slug(s.title)}>
+                <h2>{s.title}</h2>
+                <div class="prose" style="max-width:68ch" set:html={s.html} />
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

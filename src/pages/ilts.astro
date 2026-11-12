@@ -1,0 +1,512 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import '../styles/pages.css';
+import { SITE, MEDIA } from '../config';
+import { url } from '../lib/url';
+import hero from '../assets/img/ilts-cover.jpg';
+import wallpaper from '../assets/img/ilts-wallpaper.jpg';
+
+const capabilities = [
+  ['Market Scan &', 'Procurement'],
+  ['ISO 9001', 'Quality Management'],
+  ['Integrated', 'Operating System'],
+  ['Software & Hardware', 'Integration'],
+  ['Maintenance Services', '& Technical Support'],
+  ['Warehousing', '& Logistics'],
+  ['Exercise Support &', 'Training Services'],
+  ['Test & Evaluation', 'After Action Review'],
+  ['Installation & Training', 'Area Integration'],
+];
+const C = 400;
+const nodes = capabilities.map((lines, i) => {
+  const deg = -90 + i * (360 / capabilities.length);
+  const a = (deg * Math.PI) / 180;
+  const cos = Math.cos(a);
+  const sin = Math.sin(a);
+  const anchor = cos > 0.25 ? 'start' : cos < -0.25 ? 'end' : 'middle';
+  const lx = C + 270 * cos;
+  let ly = C + 270 * sin - 6;
+  if (anchor === 'middle') ly += sin < 0 ? -28 : 22;
+  return { lines, name: lines.join(' '), x: C + 230 * cos, y: C + 230 * sin, lx, ly, anchor };
+});
+
+const uplifts = [
+  ['Robertson Barracks', 'Increased support to improve range lane availability.'],
+  ['Butterworth', 'Repair and return of 15 MPTS and 3 Target Controllers.'],
+  ['KFTA', 'Provision and management of critical spares to support system availability.'],
+  ['Shoalwater Bay', 'Redistribution of portable target systems to support training requirements.'],
+  ['Singleton', 'Upgrade of the 600 m Moving Target Range underway.'],
+];
+
+const asks = [
+  'Improves the realism or complexity of warfare training?',
+  'Supports training against contemporary or emerging threats?',
+  'Introduces autonomous, robotic or other emerging systems into the training environment?',
+  'Improves target presentation, behaviour, effects or responsiveness?',
+  'Can integrate with existing training systems?',
+];
+
+const opportunities = ['Training Support and Targetry', 'Robotic Human Target', 'Robotic Tug n Trailer Vehicle Target', 'Vehicle Target Lifter'];
+
+const resources = [
+  { label: 'A message from the Army Command Team', href: 'https://www.youtube.com/watch?v=Qp54ydlsTBI' },
+  { label: 'Defence Industry Development Strategy', href: 'https://www.defence.gov.au/about/strategic-planning/2026-defence-industry-development-strategy' },
+  {
+    label: 'Defence Strategic Update 2026 and 2026 Integrated Investment Program',
+    href: 'https://www.defence.gov.au/about/strategic-planning/2026-national-defence-strategy-2026-integrated-investment-program',
+  },
+];
+
+const form = `<a href="${url('/supplier-opportunity/')}">ILTS Supplier Form</a>`;
+const faqs = [
+  {
+    q: 'Where and how will ILTS opportunities be released or notified?',
+    a: '<p>All ILTS opportunities will be published here on the <strong>Integrated Land Target Systems (ILTS) web page</strong>, with procurement activities administered through ATS’ procurement platform, <strong>VendorPanel</strong>. Open tender opportunities will also be notified through <strong>AusTender</strong>, with both AusTender and the ILTS page directing suppliers to the relevant procurement activity in VendorPanel.</p>',
+  },
+  {
+    q: 'What does ATS look for when identifying potential suppliers, products and technologies?',
+    a: '<p>ATS is looking for products, technologies and solutions that can complement, enhance, integrate and evolve Army’s live-fire targetry and training capability. We are also interested in solutions that improve supportability, whole-of-life value, Australian industry participation and supply resilience.</p>',
+  },
+  {
+    q: 'Can industry present products or technologies to ATS that aren’t part of or related to a current procurement?',
+    a: `<p>Yes, ATS wants to hear from industry about products or technologies relevant to ILTS or capable of enhancing Army’s live-fire capability and land warfare environment.</p><p>Suppliers can provide ATS with capability statements and information about products that are not part of a current procurement via the ${form}.</p>`,
+  },
+  {
+    q: 'How does a new product or technology move from industry engagement to potential assessment, procurement and integration into ILTS?',
+    a: '<p>Products typically move through these broad stages in a transparent and methodical way:</p><ol><li>Industry engagement identifies potential product options.</li><li>A procurement activity then assesses and evaluates products through a formal tender response process.</li><li>Successful products proceed to certification activities to ensure they are safe, compliant and ready for use on Defence ranges.</li><li>Products become available for procurement and are progressively integrated into ILTS as they are installed and certified.</li></ol><p>ATS assesses responses and provides recommendations, with final decision-making authority remaining with the Commonwealth.</p>',
+  },
+  {
+    q: 'What technical evidence, certification, security or other prerequisites may be required?',
+    a: '<p>Early engagement does not require a supplier to satisfy a predetermined ILTS technical certification requirement.</p><p>ATS wants sufficient information to understand the product, maturity and claimed capability. Requirements applicable to a particular procurement and/or integration activity will be clearly communicated when known.</p><p>Suppliers are encouraged to participate and should be prepared to provide requested technical and financial information as part of any tender or formal process. This may include relevant evidence, testing, certifications and authorisations to substantiate product performance and capability claims.</p><p>The level of evidence required will depend on the product and its intended application and may form part of future evaluation, design review or technical certification activities.</p>',
+  },
+  {
+    q: 'Can SMEs, companies new to Defence, overseas OEMs and Australian distributors participate?',
+    a: '<p>Yes, SMEs, new Defence entrants, established Defence suppliers, OEMs and Australian representatives/distributors are all encouraged to register relevant capability.</p><p>Suppliers should consider the ILTS forecasted industry opportunities, emerging future opportunities and future capability areas.</p>',
+  },
+  {
+    q: 'Can suppliers share or demonstrate products to ATS?',
+    a: `<p>Yes, ATS welcomes information on products and technologies that could enhance Army’s live-fire and land-warfare training capability. Suppliers can provide information and capability material via the ${form} to help ATS understand what industry can offer.</p><p>ATS may also engage with suppliers or view demonstrations through industry engagement activities, such as conferences, exhibitions and industry events.</p>`,
+  },
+  {
+    q: 'How do we register our company and capabilities with ATS, and what happens after we register?',
+    a: `<p>Registration allows ATS to build its knowledge of the market, identify relevant suppliers and products, and support early engagement as requirements develop.</p><p>Register your details and capabilities via the ${form}.</p><p>ILTS procurement activities will be notified via VendorPanel and AusTender.</p>`,
+  },
+  {
+    q: 'How can I contact the ILTS team?',
+    a: `<p>For questions about ILTS, Industry engagement or upcoming opportunities, contact the ILTS team at <a href="mailto:${SITE.iltsEmail}">${SITE.iltsEmail}</a>.</p>`,
+  },
+];
+---
+
+<Base title="Integrated Land Target Systems (ILTS)" description="ATS is the Managing Contractor for the Integrated Land Target Systems program, delivering and sustaining Army’s live-fire training capability. Industry opportunities, deliverables and FAQs.">
+  <PageHero
+    title="Integrated Land Target Systems"
+    sub="ATS is the Managing Contractor for ILTS, working with Defence, Army and Industry to deliver and sustain Army’s live-fire training capability."
+    image={hero}
+    alt="Soldiers, robotic targets and a drone on an Australian live fire range"
+    position="25% 50%"
+    video={MEDIA.iltsHeroVideo}
+  >
+    <div class="btn-row" style="margin-top:28px">
+      <Button href="/supplier-opportunity/" label="Tell us about your capability" arrow />
+      <Button href="#opportunities" label="Upcoming opportunities" variant="ghost" />
+    </div>
+  </PageHero>
+
+  <section class="section theme-paper" data-rail="About ILTS">
+    <div class="wrap split" style="align-items:center;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(24px,3vw,56px)" data-about-split>
+      <div class="stack">
+        <h2 data-hinge>About ILTS</h2>
+        <div class="prose">
+          <p class="lead" style="color:var(--fg)">
+            The <strong>Integrated Land Target Systems (ILTS) Program</strong> supports the delivery and sustainment of Army’s
+            live-fire training capability through the acquisition, integration and through-life management of land target
+            systems and associated equipment.
+          </p>
+          <p>
+            <strong>Australian Target Systems (ATS)</strong> is the Managing Contractor for ILTS, working with Defence, Army
+            and Industry to deliver and sustain safe, reliable, supportable and contemporary live-fire training systems.
+          </p>
+          <p>
+            ATS brings more than six decades of experience delivering, integrating and sustaining live-fire training systems.
+            As a leading provider of live-fire target systems to the Australian Defence Force, ATS has supported training
+            environments incorporating diverse technologies, suppliers and operational requirements.
+          </p>
+        </div>
+      </div>
+
+      <div class="ring" data-ring>
+        <svg viewBox="-190 30 1180 740" role="group" aria-label="ILTS capabilities. Select one to highlight it.">
+          <circle class="ring__track" cx={C} cy={C} r="230"></circle>
+          <g class="ring__sweep" data-ring-sweep>
+            <line x1={C} y1={C - 128} x2={C} y2={C - 214} stroke="#f79322" stroke-width="6"></line>
+          </g>
+          <circle class="ring__hub" cx={C} cy={C} r="128"></circle>
+          <text class="ring__hub-text" x={C} y={C + 32}>ILTS</text>
+          {
+            nodes.map((n, i) => (
+              <g class="ring__node" role="button" tabindex="0" aria-pressed="false" aria-label={n.name} data-ring-node={i}>
+                <circle cx={n.x} cy={n.y} r="34" fill="transparent" />
+                <circle class="ring__dot" cx={n.x} cy={n.y} r="10" />
+                <text class="ring__label" text-anchor={n.anchor} x={n.lx} y={n.ly}>
+                  <tspan x={n.lx}>{n.lines[0]}</tspan>
+                  <tspan x={n.lx} dy="33">
+                    {n.lines[1]}
+                  </tspan>
+                </text>
+              </g>
+            ))
+          }
+        </svg>
+        <ul class="ring__list">
+          {nodes.map((n) => <li>{n.name}</li>)}
+        </ul>
+        <p class="sr-only" role="status" data-ring-status></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-night" data-rail="Keeping pace">
+    <div class="wrap split">
+      <div class="split__head split__head--sticky">
+        <h2 data-hinge>Keeping pace with the changing training environment</h2>
+      </div>
+      <div class="stack" style="gap:36px">
+        <div class="prose">
+          <p class="lead" style="color:var(--fg)">
+            Modern warfare is driving a rapid pace of technological change. Autonomous systems, advanced sensors, analytics
+            tools, force-tracking technologies and software-defined capabilities are evolving faster than traditional
+            equipment and infrastructure refresh cycles.
+          </p>
+          <p>
+            As these technologies, threats and operating concepts evolve, so too must the environments in which Defence
+            personnel train. Live-fire training systems need to remain realistic, adaptable, supportable and technologically
+            relevant to the conditions Army is preparing its people to operate in.
+          </p>
+          <p>
+            ILTS provides an established foundation from which live-fire training capability can be sustained and
+            progressively enhanced, supporting Army’s focus on being ready, resilient and lethal, while remaining responsive
+            to future training needs.
+          </p>
+        </div>
+        <figure class="shot" data-wipe style="aspect-ratio:16/9;width:100%">
+          <Image src={wallpaper} alt="An armoured vehicle, infantry and aircraft on a coastal training area" widths={[640, 1000, 1671]} sizes="(max-width: 900px) 100vw, 56vw" />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-paper" data-rail="Deliverables">
+    <div class="wrap split split--even">
+      <div class="stack" style="width:100%">
+        <h2 data-hinge>ILTS deliverables so far</h2>
+        <button class="video-card" type="button" data-video-open aria-haspopup="dialog">
+          <Image src={hero} alt="" widths={[640, 1000]} sizes="(max-width: 900px) 100vw, 46vw" style="object-position:22% 50%" />
+          <span class="video-card__body">
+            <span class="video-card__play" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 2l14 8-14 8z"></path></svg>
+            </span>
+            <span>
+              <strong>KFTA</strong>
+              <small>Watch the demonstration video</small>
+            </span>
+          </span>
+        </button>
+      </div>
+      <div class="acc" data-single>
+        <div class="acc__item">
+          <button class="acc__q" type="button" aria-expanded="true">Range uplifts<span class="acc__icon" aria-hidden="true"></span></button>
+          <div class="acc__panel">
+            <div>
+              <div class="acc__a">
+                <ul>
+                  {
+                    uplifts.map(([place, what]) => (
+                      <li>
+                        <strong>{place}:</strong> {what}
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="acc__item">
+          <button class="acc__q" type="button" aria-expanded="false">Ongoing maintenance<span class="acc__icon" aria-hidden="true"></span></button>
+          <div class="acc__panel">
+            <div>
+              <div class="acc__a">
+                <p>
+                  ILTS provides ongoing maintenance and technical support for target systems across the Land training
+                  environment. This includes planned and corrective maintenance, fault diagnosis and repair, management of
+                  critical spares, OEM support and technical advice to maintain system availability and reliability.
+                  <strong>The focus is ensuring target systems remain safe, supportable, available and ready to meet Army training requirements.</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="acc__item">
+          <button class="acc__q" type="button" aria-expanded="false">Human Target System (HTS)<span class="acc__icon" aria-hidden="true"></span></button>
+          <div class="acc__panel">
+            <div>
+              <div class="acc__a">
+                <ul>
+                  <li>
+                    Engaged industry to establish a Deed of Standing Offer for Human Target System; a next-generation
+                    integrated solution comprising of a Human Target Lifter (HTL) and Target Management System (TMS).
+                  </li>
+                  <li>
+                    Enabling Defence to upgrade their live-fire training ranges and customise range configurations to deliver
+                    world-class training capability, with equipment such as fixed and portable human target lifters,
+                    projectile location systems, firer’s displays, moving targets and target management systems.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <dialog class="video-modal" data-video-modal aria-label="KFTA demonstration video">
+      <div class="video-modal__bar">
+        <span>KFTA demo video</span>
+        <button class="video-modal__close" type="button" data-video-close aria-label="Close video">×</button>
+      </div>
+      <video controls playsinline preload="none" data-src={MEDIA.kftaDemoVideo}></video>
+      <p class="video-modal__err" hidden>
+        The video could not be loaded. <a href={MEDIA.kftaDemoVideo} target="_blank" rel="noopener noreferrer">Open the video directly</a>.
+      </p>
+    </dialog>
+  </section>
+
+  <section class="section theme-night" data-rail="Industry">
+    <div class="wrap split">
+      <div class="split__head split__head--sticky">
+        <h2 data-hinge>Engaging Industry</h2>
+        <div class="prose">
+          <p>
+            ATS is interested in understanding products and technologies that could enhance Army’s live-fire and land-warfare
+            training capability. This may include solutions that improve training realism and complexity; target presentation
+            and behaviour; representation of contemporary threats; system integration; mobility and autonomy; reliability,
+            deployability and supportability; or the ability of training systems to evolve with Army’s future needs.
+          </p>
+          <p>
+            Early engagement helps ATS understand what Industry can offer, maintain awareness of emerging technologies and
+            build a broader picture of the supplier capability relevant to the current and future live-fire training
+            environment.
+          </p>
+        </div>
+        <Button href="/supplier-opportunity/" label="Tell us about your capability" arrow />
+      </div>
+      <div class="stack" style="width:100%">
+        <h3>Future capability: what we want to know about</h3>
+        <p style="color:var(--fg-soft)">Do you have a product or technology that:</p>
+        <ul class="asks" style="width:100%">
+          {
+            asks.map((a) => (
+              <li>
+                <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="17" cy="17" r="10" />
+                  <path d="M17 2v9M17 23v9M2 17h9M23 17h9" />
+                </svg>
+                <span>{a}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-olive" data-rail="Industry Brief">
+    <div class="wrap split split--even">
+      <div class="stack" style="gap:14px">
+        <h2 data-hinge>ILTS Industry Brief</h2>
+        <span class="brief__when stencil">Q1–Q2 2027</span>
+        <span class="brief__where">Canberra</span>
+      </div>
+      <div class="prose" style="color:var(--fg)">
+        <p class="lead">
+          ATS will hold an ILTS Industry Brief in Canberra in Q1–Q2 2027, providing Industry with an early view of upcoming
+          ILTS market opportunities and forecast Approach to Market activities.
+        </p>
+        <p>
+          The Brief will provide context on the broader ILTS Program, how Industry contributes to the live-fire training
+          environment, and how upcoming opportunities relate to the Program’s current and future needs. It will also provide
+          suppliers with an opportunity to better understand anticipated requirements and prepare for participation in formal
+          market activities as they arise.
+        </p>
+        <p>Further details, including timing and registration information, will be published closer to the event.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-paper" id="opportunities" data-rail="Opportunities" style="scroll-margin-top:var(--header-h)">
+    <div class="wrap split">
+      <div class="split__head split__head--sticky">
+        <h2 data-hinge>Upcoming industry opportunities</h2>
+      </div>
+      <div class="stack" style="width:100%;gap:clamp(48px,6vw,80px)">
+        <div class="opps" style="width:100%">
+          <div class="opps__head">
+            <h3>Targetry &amp; equipment</h3>
+            <span class="badge">Forecast</span>
+          </div>
+          <ul class="opps__grid">
+            {
+              opportunities.map((o) => (
+                <li>
+                  <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M6 28V11a2 2 0 0 1 2-2h3V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5h3a2 2 0 0 1 2 2v17z" />
+                    <circle cx="15" cy="18" r="3" />
+                  </svg>
+                  {o}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div style="width:100%">
+          <h3 style="margin-bottom:20px">Supporting resources</h3>
+          <ul class="resources">
+            {
+              resources.map((r) => (
+                <li>
+                  <a href={r.href} target="_blank" rel="noopener noreferrer">
+                    <span>
+                      {r.label}
+                      <span class="sr-only"> (opens in a new tab)</span>
+                    </span>
+                    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M6 16L16 6M8 6h8v8" />
+                    </svg>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-night" data-rail="FAQ">
+    <div class="wrap split">
+      <div class="split__head split__head--sticky">
+        <h2 data-hinge>Frequently asked questions</h2>
+        <p class="prose">
+          Something else? Contact the ILTS team at <a href={`mailto:${SITE.iltsEmail}`}>{SITE.iltsEmail}</a>.
+        </p>
+      </div>
+      <div class="acc">
+        {
+          faqs.map((f) => (
+            <div class="acc__item">
+              <button class="acc__q" type="button" aria-expanded="false">
+                {f.q}
+                <span class="acc__icon" aria-hidden="true" />
+              </button>
+              <div class="acc__panel">
+                <div>
+                  <div class="acc__a" set:html={f.a} />
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { lockScroll } from '../scripts/app.ts';
+
+  // Capability ring: the hand sweeps round the nine capabilities until someone picks one.
+  const ring = document.querySelector<HTMLElement>('[data-ring]');
+  if (ring) {
+    const nodes = Array.from(ring.querySelectorAll<SVGGElement>('[data-ring-node]'));
+    const sweep = ring.querySelector<SVGGElement>('[data-ring-sweep]')!;
+    const status = ring.querySelector<HTMLElement>('[data-ring-status]')!;
+    const step = 360 / nodes.length;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = -1;
+    let turns = 0;
+    let pinned = false;
+    let inView = false;
+
+    const point = (i: number, announce = false) => {
+      // Always take the short way round.
+      const prev = current < 0 ? 0 : current;
+      let delta = i - prev;
+      if (delta > nodes.length / 2) delta -= nodes.length;
+      if (delta < -nodes.length / 2) delta += nodes.length;
+      turns += delta * step;
+      current = i;
+      sweep.style.transform = `rotate(${turns}deg)`;
+      nodes.forEach((n, k) => n.setAttribute('aria-pressed', String(k === i)));
+      if (announce) status.textContent = nodes[i].getAttribute('aria-label') || '';
+    };
+    const choose = (i: number) => {
+      pinned = !(pinned && current === i);
+      point(i, true);
+    };
+    nodes.forEach((n, i) => {
+      n.addEventListener('click', () => choose(i));
+      n.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          choose(i);
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          (nodes[(i + 1) % nodes.length] as unknown as HTMLElement).focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          (nodes[(i - 1 + nodes.length) % nodes.length] as unknown as HTMLElement).focus();
+        }
+      });
+      n.addEventListener('pointerenter', () => !pinned && point(i));
+    });
+    let hovering = false;
+    ring.addEventListener('pointerenter', () => (hovering = true));
+    ring.addEventListener('pointerleave', () => (hovering = false));
+    new IntersectionObserver(([e]) => (inView = e.isIntersecting), { threshold: 0.3 }).observe(ring);
+    point(0);
+    if (!reduce) {
+      setInterval(() => {
+        if (pinned || hovering || !inView || document.hidden) return;
+        point((current + 1) % nodes.length);
+      }, 1900);
+    }
+  }
+
+  // KFTA video opens in a dialog and only starts downloading when asked for.
+  const modal = document.querySelector<HTMLDialogElement>('[data-video-modal]');
+  const opener = document.querySelector<HTMLButtonElement>('[data-video-open]');
+  if (modal && opener) {
+    const video = modal.querySelector('video')!;
+    const err = modal.querySelector<HTMLElement>('.video-modal__err')!;
+    opener.addEventListener('click', () => {
+      if (!video.src) video.src = video.dataset.src!;
+      err.hidden = true;
+      modal.showModal();
+      lockScroll(true);
+      video.play().catch(() => {});
+    });
+    video.addEventListener('error', () => (err.hidden = false));
+    modal.querySelector('[data-video-close]')!.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', (e) => e.target === modal && modal.close());
+    modal.addEventListener('close', () => {
+      video.pause();
+      lockScroll(false);
+      opener.focus();
+    });
+  }
+</script>

@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import '../styles/pages.css';
+import { SITE, FORM_ENDPOINT } from '../config';
+import hero from '../assets/img/ilts-wallpaper.jpg';
+---
+
+<Base title="Supplier opportunity" description="Register your company’s products and capabilities with ATS, the Managing Contractor for the Integrated Land Target Systems (ILTS) program." footerCta={false}>
+  <PageHero
+    title="Tell us about your capability"
+    sub="Register your organisation’s products and capabilities with the ILTS program."
+    image={hero}
+    alt="An armoured vehicle, infantry and aircraft on a coastal training area"
+    position="60% 55%"
+  />
+
+  <section class="section theme-paper" data-rail="Capability form">
+    <div class="wrap split" style="grid-template-columns:minmax(0,7fr) minmax(0,4fr)">
+      <form
+        class="steps"
+        data-form
+        data-endpoint={FORM_ENDPOINT}
+        data-mailto={SITE.iltsEmail}
+        data-subject="ILTS supplier capability registration"
+        data-sent="Registration sent. ATS will review and categorise your capabilities."
+      >
+        <fieldset>
+          <legend><b>01</b> Company details</legend>
+          <div class="form">
+            <div class="field">
+              <label for="s-company">Company name</label>
+              <input id="s-company" name="company_name" type="text" autocomplete="organization" required data-required="Enter your company name." />
+            </div>
+            <div class="field">
+              <label for="s-location">Company location</label>
+              <input id="s-location" name="company_location" type="text" aria-describedby="s-location-hint" required data-required="Enter where your company is based." />
+              <p class="field__hint" id="s-location-hint">City, state or region, and country.</p>
+            </div>
+            <div class="field">
+              <label for="s-contact">Contact name</label>
+              <input id="s-contact" name="contact_name" type="text" autocomplete="name" required data-required="Enter a contact name." />
+            </div>
+            <div class="field">
+              <label for="s-email">Email</label>
+              <input id="s-email" name="email" type="email" autocomplete="email" required data-required="Enter an email address so we can reply." />
+            </div>
+            <div class="field">
+              <label for="s-phone">Phone number <span class="opt">(optional)</span></label>
+              <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+            </div>
+            <div class="field">
+              <label for="s-web">Company website <span class="opt">(optional)</span></label>
+              <input id="s-web" name="website" type="url" autocomplete="url" placeholder="https://" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><b>02</b> Company overview</legend>
+          <div class="form">
+            <div class="field field--full">
+              <label for="s-footprint">Australian footprint</label>
+              <textarea id="s-footprint" name="australian_footprint" style="min-height:96px" aria-describedby="s-footprint-hint" required data-required="Describe your presence in Australia, or say that you have none."></textarea>
+              <p class="field__hint" id="s-footprint-hint">Your Australian offices, facilities, workforce, partners or local support. If you have no Australian presence, say so.</p>
+            </div>
+            <div class="field">
+              <label for="s-sectors">Sectors served <span class="opt">(optional)</span></label>
+              <input id="s-sectors" name="sectors_served" type="text" />
+            </div>
+            <div class="field">
+              <label for="s-type">Primary business type</label>
+              <select id="s-type" name="business_type" required data-required="Select your primary business type.">
+                <option value="">Select business type</option>
+                <option>Manufacturer</option>
+                <option>OEM</option>
+                <option>Distributor</option>
+                <option>Service Provider</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><b>03</b> Product / capability overview</legend>
+          <div class="form">
+            <div class="field field--full">
+              <label for="s-product">Product / service description</label>
+              <textarea id="s-product" name="product_description" aria-describedby="s-product-hint" required data-required="Describe your product or service."></textarea>
+              <p class="field__hint" id="s-product-hint">Your main products, services and capabilities.</p>
+            </div>
+            <div class="field field--full">
+              <label for="s-solutions">Solutions <span class="opt">(optional)</span></label>
+              <textarea id="s-solutions" name="solutions" style="min-height:96px" aria-describedby="s-solutions-hint"></textarea>
+              <p class="field__hint" id="s-solutions-hint">What needs do your solutions address, and how can they be applied?</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><b>04</b> Catalogue</legend>
+          <div class="form">
+            <div class="field field--full">
+              <label for="s-link">Link to your catalogue or flyer <span class="opt">(optional)</span></label>
+              <input id="s-link" name="catalogue_link" type="url" placeholder="https://" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><b>05</b> Demonstration availability</legend>
+          <div class="form">
+            <div class="field field--full">
+              <label for="s-demo">Can you provide a demonstration of your product or capability? <span class="opt">(optional)</span></label>
+              <select id="s-demo" name="demonstration">
+                <option value="">Select an option</option>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label class="check" for="s-updates">
+                <input id="s-updates" name="keep_informed" type="checkbox" data-label="Keep me informed" />
+                <span>Keep me informed of future ILTS opportunities and Industry engagement.</span>
+              </label>
+            </div>
+            <p class="form__status" role="status" hidden></p>
+            <div class="field--full">
+              <Button type="submit" label="Register capability" variant="ink" arrow />
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+      <aside class="next split__head--sticky">
+        <h2>What happens next?</h2>
+        <p>
+          Once registered, ATS will review and categorise your organisation’s products and capabilities to build our
+          understanding of the Industry landscape relevant to ILTS. Supplier information will be retained to support market
+          awareness and may inform early engagement where relevant. Registered suppliers can also elect to receive updates
+          on formal market opportunities and other ILTS Industry engagement activities as they arise.
+        </p>
+        <p>
+          Registration and early engagement help ATS understand available Industry capability. It does not constitute
+          prequalification, Commonwealth endorsement or a commitment to future procurement.
+        </p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import '../scripts/forms.ts';
+</script>

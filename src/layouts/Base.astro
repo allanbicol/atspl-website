@@ -1,0 +1,152 @@
+---
+import { Image } from 'astro:assets';
+import '../styles/global.css';
+import { SITE, NAV } from '../config';
+import { url, isPreviewBase } from '../lib/url';
+import Button from '../components/Button.astro';
+import logo from '../assets/img/logo.png';
+import avob from '../assets/img/avob.png';
+import iso from '../assets/img/iso-9001.png';
+
+interface Props {
+  title?: string;
+  description?: string;
+  footerCta?: boolean;
+}
+const { title, description = SITE.description, footerCta = true } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | Live-fire range systems`;
+// Page path without the base path, so nav state and the canonical URL are the
+// same wherever the site is hosted.
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.slice(basePath.length).replace(/\/?$/, '/');
+const canonical = new URL(path, SITE.url).href;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {isPreviewBase && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#171a12" />
+    <link rel="icon" type="image/png" href={url('/favicon.png')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_AU" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // If the main script never arrives, show everything anyway.
+      setTimeout(function () {
+        document.documentElement.classList.add('app-ready');
+      }, 4000);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+
+    <header class="header" data-header>
+      <div class="wrap header__bar">
+        <a class="brand" href={url('/')} aria-label={`${SITE.name} home`}>
+          <Image src={logo} alt="" width={92} loading="eager" />
+          <span class="brand__name"><span>Australian</span><span>Target Systems</span></span>
+        </a>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
+          <span></span><span></span>
+          <b class="sr-only">Menu</b>
+        </button>
+        <nav class="nav" id="site-nav" aria-label="Main">
+          <ul class="nav__list">
+            {
+              NAV.map((item, i) => (
+                <li>
+                  <a class="nav__link" href={url(item.href)} style={`--i:${i}`} aria-current={path === item.href ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <Button href="/contact-us/" label="Contact us" />
+        </nav>
+      </div>
+    </header>
+
+    <main id="content">
+      <slot />
+    </main>
+
+    <footer class="footer theme-night">
+      {
+        footerCta && (
+          <div class="wrap footer__cta" data-rail="Contact">
+            <h2 data-hinge>Let’s talk about your range.</h2>
+            <div class="footer__cta-row">
+              <Button href="/contact-us/" label="Contact the team" arrow />
+              <a class="footer__phone" href={SITE.phoneHref}>
+                {SITE.phone}
+              </a>
+            </div>
+          </div>
+        )
+      }
+      <div class="wrap footer__cols">
+        <div>
+          <h3>Head office</h3>
+          <address style="font-style:normal">
+            {SITE.address.map((line) => <div>{line}</div>)}
+          </address>
+          <p style="margin-top:12px">
+            <a class="link" href={SITE.mapUrl} target="_blank" rel="noopener noreferrer">
+              Open in Maps<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </p>
+        </div>
+        <div>
+          <h3>Get in touch</h3>
+          <ul>
+            <li><a href={SITE.phoneHref}>{SITE.phone}</a></li>
+            <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+            <li><a href={`mailto:${SITE.iltsEmail}`}>ILTS program office</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Site</h3>
+          <ul>
+            {NAV.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+            <li><a href={url('/supplier-opportunity/')}>Supplier registration</a></li>
+            <li><a href={url('/contact-us/')}>Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Accreditation</h3>
+          <div class="footer__badges">
+            <Image src={avob} alt="Australian Veteran Owned Business" width={168} />
+            <Image src={iso} alt="ISO 9001 Quality certified system" height={168} />
+          </div>
+        </div>
+      </div>
+      <div class="wrap footer__legal">
+        <span>© {year} Australian Target Systems Pty Ltd</span>
+        <a href={url('/website-privacy-policy/')}>Privacy policy</a>
+      </div>
+    </footer>
+
+    <div class="rail" data-rail-root aria-hidden="true">
+      <span class="rail__line"></span>
+      <span class="rail__mover"></span>
+      <span class="rail__label"></span>
+    </div>
+
+    <script>
+      import '../scripts/app.ts';
+    </script>
+  </body>
+</html>

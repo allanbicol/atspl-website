@@ -1,0 +1,277 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import '../styles/home.css';
+import { STATS } from '../config';
+import { url } from '../lib/url';
+import shooterScope from '../assets/img/shooter-scope.png';
+import imgDesign from '../assets/img/ranges-design.jpg';
+import imgIntegration from '../assets/img/ranges-integration.jpg';
+import imgMaintenance from '../assets/img/ranges-maintenance.jpg';
+import imgHistory from '../assets/img/history.jpg';
+import imgIlts from '../assets/img/ilts-cover.jpg';
+
+const caps = [
+  {
+    id: 'design',
+    title: 'Design',
+    text: 'A training need led design approach, so the technical range solution is safe, compliant and meets the end user’s exacting requirements.',
+    img: imgDesign,
+    alt: 'Range engineering drawings spread across a desk',
+  },
+  {
+    id: 'integration',
+    title: 'Integration',
+    text: 'Ex-military professionals working with software and hardware engineers to achieve a fully integrated live fire training solution.',
+    img: imgIntegration,
+    alt: 'A technician commissioning a full-size armoured vehicle target on a range',
+  },
+  {
+    id: 'maintenance',
+    title: 'Maintenance',
+    text: 'Nationwide reliability centred maintenance across all Australian Defence Force ranges, for availability, reliability and longevity.',
+    img: imgMaintenance,
+    alt: 'Hands servicing a target lifter mechanism in the field',
+  },
+];
+
+const years = [
+  { y: '1954', t: 'Kenneth Gillam builds a prototype Automatic Target Apparatus' },
+  { y: '1959', t: 'Australasian Training Aids is established' },
+  { y: '1983', t: 'DART becomes a complete live fire training system' },
+  { y: '2002', t: 'The business becomes Australian Target Systems' },
+  { y: '2024', t: 'Appointed Managing Contractor for ILTS' },
+];
+---
+
+<Base>
+  <section class="hero theme-night" data-hero data-rail="Firing point">
+    <canvas class="hero__canvas" data-range aria-hidden="true"></canvas>
+    <div class="hero__fallback" aria-hidden="true">
+      <Image src={shooterScope} alt="" width={640} loading="lazy" />
+    </div>
+    <div class="hero__scrim"></div>
+    <div class="reticle" data-reticle aria-hidden="true">
+      <svg viewBox="0 0 72 72" fill="none" stroke="#f79322">
+        <circle class="reticle__ring" cx="36" cy="36" r="26" stroke-width="2.5"></circle>
+        <path stroke-width="2.5" d="M36 2v16M36 54v16M2 36h16M54 36h16"></path>
+        <path stroke-width="1" d="M36 24v24M24 36h24" opacity=".7"></path>
+      </svg>
+    </div>
+
+    <div class="wrap hero__content">
+      <h1 class="hero__title" data-hinge="load" data-hinge-delay="0.35">
+        When you aim for perfection, you’ll discover it’s a moving target.
+      </h1>
+      <div class="hero__foot">
+        <p class="lead">
+          Live fire range systems for the Australian Defence Force and ranges worldwide. A lineage that began in 1954.
+        </p>
+        <div class="btn-row">
+          <Button href="/ranges/" label="See how we build ranges" arrow />
+          <Button href="/ilts/" label="ILTS program" variant="ghost" />
+        </div>
+      </div>
+    </div>
+
+    <aside class="hud" data-hud aria-hidden="true">
+      <div class="hud__head"><span class="hud__dot"></span>Firer’s display</div>
+      <p class="hud__hint" data-hud-hint>Take aim. Click a target.</p>
+      <div class="hud__read" data-hud-read hidden>
+        <dl>
+          <div><dt>Lane</dt><dd data-hud-lane>–</dd></div>
+          <div><dt>Range</dt><dd data-hud-range>–</dd></div>
+          <div><dt>Hits</dt><dd data-hud-hits>0</dd></div>
+          <div class="hud__wide"><dt>Last round</dt><dd data-hud-last>–</dd></div>
+        </dl>
+        <svg class="hud__plot" viewBox="0 0 60 100" fill="none">
+          <path
+            d="M3 99V32a5 5 0 0 1 5-5h10V7a5 5 0 0 1 5-5h14a5 5 0 0 1 5 5v20h10a5 5 0 0 1 5 5v67z"
+            fill="rgba(230,223,200,.12)"
+            stroke="#b9bca8"
+            stroke-width="1.5"></path>
+          <ellipse cx="30" cy="60" rx="14" ry="20" stroke="#747233" stroke-width="1.2"></ellipse>
+          <circle class="hud__shot" data-hud-shot cx="30" cy="60" r="3.2" fill="#f79322"></circle>
+        </svg>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section theme-paper mission" data-rail="Mission">
+    <div class="wrap grid">
+      <p class="marker">ATS mission</p>
+      <p class="mission__text" data-scrub-text>
+        To enhance national strategic capabilities through the provision of integrated live fire range systems, immersive
+        training approaches and strategic security solutions.
+      </p>
+    </div>
+  </section>
+
+  <section class="section theme-night caps" data-rail="Capability">
+    <div class="wrap">
+      <div class="caps__head">
+        <p class="marker">What we do</p>
+        <h2 data-hinge>Ranges, from first drawing to the thousandth serial.</h2>
+      </div>
+      <div class="caps__body">
+        <ul class="caps__list" data-caps>
+          {
+            caps.map((c, i) => (
+              <li>
+                <a class:list={['cap', i === 0 && 'is-active']} href={url(`/ranges/#${c.id}`)} data-cap={i}>
+                  <span class="cap__title">{c.title}</span>
+                  <span class="cap__go" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M3 9h12M10 4l5 5-5 5" />
+                    </svg>
+                  </span>
+                  <span class="cap__text">{c.text}</span>
+                  <span class="cap__shot shot">
+                    <Image src={c.img} alt={c.alt} widths={[480, 800, 1200]} sizes="100vw" />
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="caps__frame" data-caps-frame aria-hidden="true">
+          {
+            caps.map((c, i) => (
+              <figure class:list={[i === 0 && 'is-active']}>
+                <Image src={c.img} alt="" widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 40vw" />
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-olive" data-rail="Numbers">
+    <div class="wrap">
+      <h2 class="sr-only">ATS in numbers</h2>
+      <div class="stats">
+        {
+          STATS.map((s) => (
+            <div class="stat">
+              <span class="stat__num stencil">
+                <span data-count={s.value}>{new Intl.NumberFormat('en-AU').format(s.value)}</span>
+                <sup>{s.suffix}</sup>
+              </span>
+              <span class="stat__label">{s.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-paper heritage" data-rail="Heritage">
+    <div class="wrap">
+      <div class="grid heritage__grid">
+        <figure class="shot heritage__shot" data-wipe>
+          <Image src={imgHistory} alt="Archive photographs of early ATS target systems alongside a modern soldier on the range" widths={[640, 960, 1600]} sizes="(max-width: 860px) 100vw, 50vw" />
+        </figure>
+        <div class="heritage__copy">
+          <p class="marker">Our history</p>
+          <h2 data-hinge>From the battlefield.</h2>
+          <p class="prose lead">
+            The ATS lineage began with Kenneth Gillam, a World War II veteran who used his battlefield experience to build a
+            prototype Automatic Target Apparatus, driven by a desire to better prepare Australian Diggers for the rigours of
+            combat.
+          </p>
+          <a class="link" href={url('/about-us/')}>
+            Read the full history
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"></path></svg>
+          </a>
+        </div>
+      </div>
+      <ol class="years">
+        {
+          years.map((y) => (
+            <li>
+              <b class="stencil">{y.y}</b>
+              <span>{y.t}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="ilts-band theme-night" data-rail="ILTS">
+    <div class="ilts-band__media" data-parallax="14">
+      <Image src={imgIlts} alt="Soldiers and robotic targets on an Australian live fire range" widths={[900, 1600, 2800]} sizes="240vw" />
+    </div>
+    <div class="wrap">
+      <div class="ilts-band__copy">
+        <p class="marker">Managing Contractor since 2024</p>
+        <h2 data-hinge>Integrated Land Target Systems</h2>
+        <p class="lead" style="max-width:54ch;color:#dfe0d0">
+          ATS integrates the best of breed live fire target systems on the market to deliver the most realistic and
+          immersive live fire training environments for Australian soldiers.
+        </p>
+        <div class="btn-row">
+          <Button href="/ilts/" label="Explore the ILTS program" arrow />
+          <Button href="/supplier-opportunity/" label="Register your capability" variant="ghost" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import type { HitDetail } from '../scripts/range.ts';
+
+  // Capability rows swap the framed photograph.
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-cap]'));
+  const figures = Array.from(document.querySelectorAll<HTMLElement>('[data-caps-frame] figure'));
+  let active = 0;
+  const activate = (i: number) => {
+    if (i === active) return;
+    figures.forEach((f) => f.classList.remove('was-active'));
+    figures[active]?.classList.replace('is-active', 'was-active');
+    rows[active]?.classList.remove('is-active');
+    active = i;
+    rows[i].classList.add('is-active');
+    figures[i]?.classList.add('is-active');
+  };
+  rows.forEach((r, i) => {
+    r.addEventListener('pointerenter', () => activate(i));
+    r.addEventListener('focus', () => activate(i));
+  });
+
+  // The 3D range is the heaviest thing on the site; load it after first paint.
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-range]');
+  if (hero && canvas) {
+    const hint = hero.querySelector<HTMLElement>('[data-hud-hint]')!;
+    const read = hero.querySelector<HTMLElement>('[data-hud-read]')!;
+    const set = (k: string, v: string) => (hero.querySelector<HTMLElement>(`[data-hud-${k}]`)!.textContent = v);
+    const shot = hero.querySelector<SVGCircleElement>('[data-hud-shot]')!;
+
+    hero.addEventListener('range:hit', (e) => {
+      const d = (e as CustomEvent<HitDetail>).detail;
+      hint.hidden = true;
+      read.hidden = false;
+      set('lane', d.lane === 'Mover' ? 'MOV' : d.lane.padStart(2, '0'));
+      set('range', `${d.range}m`);
+      set('hits', String(d.hits));
+      const near = Math.hypot(d.x, d.y) < 30;
+      const horiz = `${Math.abs(d.x)} mm ${d.x < 0 ? 'left' : 'right'}`;
+      const vert = `${Math.abs(d.y)} mm ${d.y < 0 ? 'low' : 'high'}`;
+      set('last', near ? 'Centre hit' : `${horiz}, ${vert}`);
+      shot.setAttribute('cx', String(3 + d.u * 54));
+      shot.setAttribute('cy', String(99 - d.v * 97));
+      shot.classList.remove('is-new');
+      void shot.getBoundingClientRect();
+      shot.classList.add('is-new');
+    });
+
+    const start = () =>
+      import('../scripts/range.ts').then((m) => m.initRange(canvas, hero)).catch(() => hero.classList.add('no-webgl'));
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 600 });
+    else setTimeout(start, 120);
+  }
+</script>

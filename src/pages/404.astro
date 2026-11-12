@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import '../styles/pages.css';
+---
+
+<Base title="Page not found" footerCta={false}>
+  <section class="theme-night">
+    <div class="wrap lost">
+      <span class="stencil" aria-hidden="true">404</span>
+      <h1 style="font-size:var(--fs-h2)" data-hinge="load">That page is not on the range.</h1>
+      <p class="lead" style="color:var(--fg-soft);max-width:44ch">The address may have changed, or the page may have been removed.</p>
+      <div class="btn-row">
+        <Button href="/" label="Back to the home page" arrow />
+        <Button href="/contact-us/" label="Contact us" variant="ghost" />
+      </div>
+    </div>
+  </section>
+</Base>

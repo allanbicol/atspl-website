@@ -1,0 +1,41 @@
+---
+// A button whose label plate drops on its hinge while a second plate swings up.
+import { url } from '../lib/url';
+interface Props {
+  label: string;
+  href?: string;
+  variant?: 'primary' | 'ghost' | 'ink';
+  type?: 'button' | 'submit';
+  arrow?: boolean;
+  external?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const { label, href, variant = 'primary', type = 'button', arrow = false, external = false, class: cls, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'button';
+const linkAttrs = href ? { href: url(href), ...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {}) } : { type };
+---
+
+<Tag class:list={['btn', variant !== 'primary' && `btn--${variant}`, cls]} {...linkAttrs} {...rest}>
+  <span class="btn__plate">
+    {label}
+    {
+      arrow && (
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 9h12M10 4l5 5-5 5" />
+        </svg>
+      )
+    }
+  </span>
+  <span class="btn__plate btn__plate--up" aria-hidden="true">
+    {label}
+    {
+      arrow && (
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 9h12M10 4l5 5-5 5" />
+        </svg>
+      )
+    }
+  </span>
+  {external && <span class="sr-only"> (opens in a new tab)</span>}
+</Tag>

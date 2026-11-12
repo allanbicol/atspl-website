@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import '../styles/pages.css';
+import hero from '../assets/img/header-about.jpg';
+import avob from '../assets/img/avob.png';
+import iso from '../assets/img/iso-9001.png';
+
+const eras = [
+  {
+    year: '1954',
+    title: 'From the battlefield',
+    text: 'The ATS lineage began with Kenneth Gillam, a World War II Veteran, who used his battlefield experiences as a soldier to build a prototype Automatic Target Apparatus in 1954. Driven by a desire to better prepare Australian Diggers for the rigours of combat, he demonstrated his invention to the Australian Army, which resulted in a collaborative development effort to further refine the invention under the codename “Austfire”. On the 2nd of September 1959, Australasian Training Aids (ATA) was established and Ken’s invention evolved to become the Disappearing Automatic Retaliatory Target (DART), or favourably termed the “DART Mech”.',
+  },
+  {
+    year: '1983',
+    title: 'Global transformation',
+    text: 'Partnering with electrical contractor and shooting enthusiast, Lindsay Knight, the two men introduced a variety of features, including radio control and automatic marking capability. This partnership resulted in the DART concept being expanded to become a complete live fire training system in 1983. Known initially as the SUPERDART and then eventually the Marksmanship Training Range (MTR), this innovative training system quickly became the backbone of the Australian military live fire training capability.',
+  },
+  {
+    year: '2002',
+    title: 'Live fire integrator',
+    text: 'In 2002, the business evolved to become Australian Target Systems (ATS) Pty Ltd. Upholding the same core values, hands-on experience and innovative philosophy espoused by its ATA forebears, ATS further refined combat marksmanship training and became the dominant provider for all infantry, armoured and aircraft live fire ranges for the Australian military. This proven performance resulted in ATS also becoming a strategic security specialist and much sought after live fire capability systems integrator for the delivery of some of the largest and most complex military ranges around the world.',
+  },
+  {
+    year: '2024',
+    title: 'Managing contractor',
+    text: 'In 2024, ATS was appointed as the Managing Contractor (MC) by the Capability Acquisition and Sustainment Group (CASG) for the Integrated Land Target Systems (ILTS) program. Acting in the best interests of the end user and the Commonwealth of Australia, ATS now integrates the best of breed live fire target systems available on the market to deliver the most realistic and immersive live fire training environments for Australian soldiers.',
+  },
+];
+const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+---
+
+<Base title="About us" description="The ATS lineage runs from Kenneth Gillam’s 1954 Automatic Target Apparatus to Managing Contractor for the Integrated Land Target Systems program.">
+  <PageHero title="Born on the battlefield." image={hero} alt="An Australian soldier firing on a live fire range" position="30% 40%" />
+
+  <section class="section theme-paper mission" data-rail="Mission">
+    <div class="wrap grid">
+      <p class="marker">ATS mission</p>
+      <p class="mission__text" data-scrub-text>
+        To enhance national strategic capabilities through the provision of integrated live fire range systems, immersive
+        training approaches and strategic security solutions.
+      </p>
+    </div>
+  </section>
+
+  <section class="theme-night" data-rail="History">
+    <div class="wrap timeline" data-timeline>
+      <div class="timeline__aside" aria-hidden="true">
+        <p class="marker">Our history</p>
+        <div class="odo stencil" data-odo>
+          {
+            [0, 1, 2, 3].map((c) => (
+              <span class="odo__col" style={`--c:${c}`}>
+                {digits.map((d) => <span>{d}</span>)}
+              </span>
+            ))
+          }
+        </div>
+        <ul class="timeline__steps">
+          {
+            eras.map((e, i) => (
+              <li>
+                <button type="button" tabindex="-1" data-step={i} title={e.year} aria-current={i === 0 ? 'true' : 'false'} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="timeline__eras">
+        {
+          eras.map((e) => (
+            <article class="era" data-era={e.year}>
+              <span class="era__year stencil">{e.year}</span>
+              <h2>{e.title}</h2>
+              <p>{e.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-paper" data-rail="Accreditation">
+    <div class="wrap stack" style="gap:clamp(32px,4vw,56px)">
+      <h2 data-hinge>Accreditation</h2>
+      <div class="accred" style="width:100%">
+        <div class="accred__item">
+          <Image src={avob} alt="" height={240} />
+          <div>
+            <h3>Veteran owned</h3>
+            <p>ATS is an Australian Veteran Owned Business.</p>
+          </div>
+        </div>
+        <div class="accred__item">
+          <Image src={iso} alt="" height={240} />
+          <div>
+            <h3>ISO 9001</h3>
+            <p>Our quality management system is certified to ISO 9001.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import gsap from 'gsap';
+  import { scrollToEl } from '../scripts/app.ts';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // The big year rolls like an odometer as each era reaches the middle of the screen.
+  const timeline = document.querySelector<HTMLElement>('[data-timeline]');
+  if (timeline) {
+    const cols = Array.from(timeline.querySelectorAll<HTMLElement>('.odo__col'));
+    const eras = Array.from(timeline.querySelectorAll<HTMLElement>('[data-era]'));
+    const steps = Array.from(timeline.querySelectorAll<HTMLButtonElement>('[data-step]'));
+    const show = (i: number) => {
+      const year = eras[i].dataset.era!;
+      cols.forEach((c, k) => (c.style.transform = `translateY(-${Number(year[k]) * 10}%)`));
+      eras.forEach((e, k) => e.classList.toggle('is-current', k === i));
+      steps.forEach((s, k) => s.setAttribute('aria-current', String(k === i)));
+    };
+    eras.forEach((era, i) => {
+      ScrollTrigger.create({
+        trigger: era,
+        start: 'top 55%',
+        end: 'bottom 55%',
+        onToggle: (self) => self.isActive && show(i),
+      });
+    });
+    steps.forEach((s, i) => s.addEventListener('click', () => scrollToEl(eras[i])));
+    show(0);
+    timeline.classList.add('is-live');
+  }
+</script>

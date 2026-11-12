@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import '../styles/pages.css';
+import { SITE, FORM_ENDPOINT } from '../config';
+import hero from '../assets/img/header-contact.jpg';
+---
+
+<Base title="Contact us" description="Contact Australian Target Systems in Albury, NSW. Call +61 2 6051 7000 or send the team a message." footerCta={false}>
+  <PageHero
+    title="Contact us"
+    sub="Our friendly team are always happy to help. Give us a call or send us an email."
+    image={hero}
+    alt="An ATS service vehicle outside the Albury head office"
+    position="50% 60%"
+  />
+
+  <section class="section theme-paper" data-rail="Message">
+    <div class="wrap split">
+      <dl class="contact__details split__head--sticky">
+        <div>
+          <dt>Call</dt>
+          <dd><a href={SITE.phoneHref}>{SITE.phone}</a></dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd>
+        </div>
+        <div>
+          <dt>Visit</dt>
+          <dd class="plain">
+            {SITE.address.map((line) => <div>{line}</div>)}
+            <a class="link" href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" style="margin-top:12px;font-size:1rem">
+              Open in Maps<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt>ILTS program office</dt>
+          <dd class="plain"><a href={`mailto:${SITE.iltsEmail}`}>{SITE.iltsEmail}</a></dd>
+        </div>
+      </dl>
+
+      <form class="form" data-form data-endpoint={FORM_ENDPOINT} data-mailto={SITE.email} data-sent="Message sent. We will be in touch soon.">
+        <h2 class="field--full" data-hinge style="margin-bottom:8px">Send a message</h2>
+        <div class="field">
+          <label for="c-first">First name</label>
+          <input id="c-first" name="first_name" type="text" autocomplete="given-name" required data-required="Enter your first name." />
+        </div>
+        <div class="field">
+          <label for="c-last">Last name</label>
+          <input id="c-last" name="last_name" type="text" autocomplete="family-name" required data-required="Enter your last name." />
+        </div>
+        <div class="field">
+          <label for="c-phone">Phone number <span class="opt">(optional)</span></label>
+          <input id="c-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+        </div>
+        <div class="field">
+          <label for="c-email">Email address</label>
+          <input id="c-email" name="email" type="email" autocomplete="email" required data-required="Enter your email address so we can reply." />
+        </div>
+        <div class="field">
+          <label for="c-company">Company <span class="opt">(optional)</span></label>
+          <input id="c-company" name="company" type="text" autocomplete="organization" />
+        </div>
+        <div class="field">
+          <label for="c-source">How did you find us? <span class="opt">(optional)</span></label>
+          <select id="c-source" name="source">
+            <option value="">Select one</option>
+            <option>LinkedIn</option>
+            <option>Website</option>
+            <option>Advertisement</option>
+            <option>A friend</option>
+          </select>
+        </div>
+        <div class="field field--full">
+          <label for="c-subject">Subject</label>
+          <input id="c-subject" name="subject" type="text" required data-required="Add a subject for your message." />
+        </div>
+        <div class="field field--full">
+          <label for="c-message">Your message</label>
+          <textarea id="c-message" name="message" required data-required="Write your message."></textarea>
+        </div>
+        <p class="form__status" role="status" hidden></p>
+        <div class="field--full">
+          <Button type="submit" label="Send message" variant="ink" arrow />
+        </div>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import '../scripts/forms.ts';
+</script>
